@@ -25,7 +25,7 @@ var name = process.argv[3];
 
 switch (command) {
     case "concert-this":
-        //code
+        concertThis(name);
         break;
 
     case "spotify-this-song":
@@ -59,7 +59,37 @@ Venue location
 Date of the Event (use moment to format this as "MM/DD/YYYY")
 */
 // Store all of the arguments in an array
-
+function concertThis(artist) {
+    console.log("Artist is: " + artist);
+    var queryUrl = "https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp"
+    
+    axios.get(queryUrl).then(
+        function(response) {
+          console.log("Band Object: " + response.data[0].venue.name);
+          
+        })
+        .catch(function(error) {
+          if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            console.log("---------------Data---------------");
+            console.log(error.response.data);
+            console.log("---------------Status---------------");
+            console.log(error.response.status);
+            console.log("---------------Status---------------");
+            console.log(error.response.headers);
+          } else if (error.request) {
+            // The request was made but no response was received
+            // `error.request` is an object that comes back with details pertaining to the error that occurred.
+            console.log(error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log("Error", error.message);
+          }
+          console.log(error.config);
+        });
+      
+}
 
 // spotify-this-song
 
