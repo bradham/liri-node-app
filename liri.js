@@ -20,8 +20,20 @@ var keys = require("./keys.js");
 var command = process.argv[2];
 //console.log("Command is " + command);
 
-//Get the name of the artist or song or movie to find
-var name = process.argv[3];
+//An array to get the name of the artist or song or movie to find
+var nodeArgs = process.argv;
+var name = "";
+
+for (var i = 3; i < nodeArgs.length; i++) {
+
+    if (i > 3 && i < nodeArgs.length) {
+      name = name + "+" + nodeArgs[i];
+    } else {
+      name += nodeArgs[i];
+  
+    }
+  }
+  
 
 switch (command) {
     case "concert-this":
@@ -60,18 +72,25 @@ Date of the Event (use moment to format this as "MM/DD/YYYY")
 */
 // Store all of the arguments in an array
 function concertThis(artist) {
-    console.log("<**----------------------------**>");
-    console.log("Artist: " + artist);
+    //console.log("Input: " + artist);
     var queryUrl = "https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp"
     
     axios.get(queryUrl).then(
-        function(response) {
-          console.log("Venue name: " + response.data[0].venue.name);
-          console.log("Venue location: " + response.data[0].venue.city + ", " + response.data[0].venue.region + " " + response.data[0].venue.country);
-          console.log("Date of event: " + response.data[0].datetime);
-          console.log("<**----------------------------**>");
+        function (response) {
+            console.log(" ");
+            console.log("<**-------------------------------------**>");
+            console.log("Artist: " + response.data[0].lineup[0]);
+            console.log("Venue name: " + response.data[0].venue.name);
+            console.log("Venue location: " + response.data[0].venue.city + ", " + response.data[0].venue.region + " " + response.data[0].venue.country);
 
-          
+            //Format the date so that it's readable.
+            var date = moment(response.data[0].datetime).format('MMMM Do YYYY, h:mm a')
+            console.log("Date of event: " + date);
+            console.log("<**-------------------------------------**>");
+            console.log(" ");
+
+            console.log(JSON.stringify(response.data[0].lineup));
+
         })
         .catch(function(error) {
           if (error.response) {
