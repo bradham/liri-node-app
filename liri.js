@@ -1,5 +1,5 @@
 /* ***************
-LIRI node.js projec by Brad Ham
+LIRI node.js project by Brad Ham
 October 2019
 *************** */
 
@@ -14,6 +14,7 @@ var spotify = require("node-spotify-api");
 
 var keys = require("./keys.js");
 
+//RE-ENABLE WHEN USED. ERROR OCCURS CURRENTLY
 //var spotifyKey = new Spotify(keys.spotify);
 
 //Get the command the user wrote
@@ -32,7 +33,7 @@ for (var i = 3; i < nodeArgs.length; i++) {
       name += nodeArgs[i];
   
     }
-  }
+  };
   
 
 switch (command) {
@@ -45,7 +46,7 @@ switch (command) {
         break;
 
     case "movie-this":
-        movieThis();
+        movieThis(name);
         break;
 
     case "do-what-it-says":
@@ -56,7 +57,7 @@ switch (command) {
         console.log("Please input a correct command");
     }
 
-}
+};
 
 // concert-this
 /*
@@ -122,8 +123,65 @@ function spotifyThis() {
 }
 
 // movie-this
-function movieThis() {
-    console.log("<**----------------------------**>");
+/* 
+node liri.js movie-this '<movie name here>'
+
+This will output the following information to your terminal/bash window:
+
+   * Title of the movie.
+   * Year the movie came out.
+   * IMDB Rating of the movie.
+   * Rotten Tomatoes Rating of the movie.
+   * Country where the movie was produced.
+   * Language of the movie.
+   * Plot of the movie.
+   * Actors in the movie.
+
+If the user doesn't type a movie in, the program will output data for the movie 'Mr. Nobody.'
+*/
+function movieThis(movie) {
+    console.log("Input: " + movie);
+    var queryUrl = "http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=trilogy";
+    console.log("URL: " + queryUrl);
+    
+    axios.get(queryUrl).then(
+        function (response) {
+            console.log(" ");
+            console.log("<**-------------------------------------**>");
+            console.log("Title: " + response.data.Title);
+            console.log("Release Year: " + response.data.Year);
+            console.log("IMDB Rating: " + response.data.Ratings[0].Value);
+            console.log("Rotten Tomatoes Rating: " + response.data.Ratings[1].Value);
+
+            //Format the date so that it's readable.
+            // var date = moment(response.data[0].datetime).format('MMMM Do YYYY, h:mm a')
+            // console.log("Date of event: " + date);
+            console.log("<**-------------------------------------**>");
+            console.log(" ");
+
+            //console.log(JSON.stringify(response.data));
+
+        })
+        .catch(function(error) {
+          if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            console.log("---------------Data---------------");
+            console.log(error.response.data);
+            console.log("---------------Status---------------");
+            console.log(error.response.status);
+            console.log("---------------Status---------------");
+            console.log(error.response.headers);
+          } else if (error.request) {
+            // The request was made but no response was received
+            // `error.request` is an object that comes back with details pertaining to the error that occurred.
+            console.log(error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log("Error", error.message);
+          }
+          console.log(error.config);
+        });
 
 }
 
