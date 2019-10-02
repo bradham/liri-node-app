@@ -1,6 +1,6 @@
 /* ***************
 LIRI node.js project by Brad Ham
-October 2019
+October 2, 2019
 *************** */
 
 //read and set any environment variables with the dotenv package
@@ -62,7 +62,7 @@ switch (command) {
 
 //node liri.js concert-this <artist/band name here>
 function concertThis(artist) {
-  console.log("Input: " + artist);
+  //console.log("Input: " + artist);
   var queryUrl = "https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp"
 
   axios.get(queryUrl).then(
@@ -105,7 +105,7 @@ function concertThis(artist) {
 
 }
 
-// node liri.js spotify-this-song '<song name here>'
+//node liri.js spotify-this-song '<song name here>'
 function spotifyThis(song) {
   //console.log("Input: " + song);
 
