@@ -25,6 +25,7 @@ var command = process.argv[2];
 var nodeArgs = process.argv;
 var name = "";
 
+//Take the arguments and put them into a single string
 for (var i = 3; i < nodeArgs.length; i++) {
 
   if (i > 3 && i < nodeArgs.length) {
@@ -35,7 +36,7 @@ for (var i = 3; i < nodeArgs.length; i++) {
   }
 };
 
-
+//Decide which command to execute
 switch (command) {
   case "concert-this":
     concertThis(name);
@@ -61,7 +62,7 @@ switch (command) {
 
 //node liri.js concert-this <artist/band name here>
 function concertThis(artist) {
-  //console.log("Input: " + artist);
+  console.log("Input: " + artist);
   var queryUrl = "https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp"
 
   axios.get(queryUrl).then(
@@ -224,8 +225,41 @@ function movieThis(movie) {
 
 }
 
-// do-what-it-says
+//node liri.js do-what-it-says
 function doThis() {
-  console.log("<**----------------------------**>");
+
+  fs.readFile("random.txt", "utf8", function(err, data) {
+    if (err) {
+      return console.log(err);
+    }
+
+    // Break down all the commands inside
+    data = data.split(",");
+
+    for (var i = 0; i < data.length; i++) {
+
+      switch (data[i]) {
+        case "concert-this":
+          concertThis(data[i + 1]);
+          break;
+      
+        case "spotify-this-song":
+          spotifyThis(data[i + 1]); //spotify-this-song,"I Want it That Way",
+          break;
+      
+        case "movie-this":
+          movieThis(data[i + 1]);
+          break;
+      
+        default: {
+          //console.log("Incorrect command in file");
+          break;
+        }
+      
+      };
+      
+    }
+
+  });
 
 }
