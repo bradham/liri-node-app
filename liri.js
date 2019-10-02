@@ -90,7 +90,7 @@ function concertThis(artist) {
             console.log("<**-------------------------------------**>");
             console.log(" ");
 
-            console.log(JSON.stringify(response.data[0].lineup));
+            //console.log(JSON.stringify(response.data[0].lineup));
 
         })
         .catch(function(error) {
@@ -141,24 +141,38 @@ If the user doesn't type a movie in, the program will output data for the movie 
 */
 function movieThis(movie) {
     console.log("Input: " + movie);
+
+    if (!movie) {
+      movie = "Mr. Nobody";
+    }
     var queryUrl = "http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=trilogy";
-    console.log("URL: " + queryUrl);
+    //console.log("URL: " + queryUrl);
+
     
     axios.get(queryUrl).then(
         function (response) {
+//      Used if we set another default query
+            if (typeof response.data.Title === "undefined") {
+              console.log("The movie " + movie + " cannot be found.");
+            } else {
             console.log(" ");
             console.log("<**-------------------------------------**>");
             console.log("Title: " + response.data.Title);
             console.log("Release Year: " + response.data.Year);
             console.log("IMDB Rating: " + response.data.Ratings[0].Value);
             console.log("Rotten Tomatoes Rating: " + response.data.Ratings[1].Value);
+            console.log("Produced in: " + response.data.Country);
+            console.log("Language: " + response.data.Language);
+            console.log("Plot: " + response.data.Plot);
+            console.log("Actors: " + response.data.Actors);
+
 
             //Format the date so that it's readable.
             // var date = moment(response.data[0].datetime).format('MMMM Do YYYY, h:mm a')
             // console.log("Date of event: " + date);
             console.log("<**-------------------------------------**>");
             console.log(" ");
-
+            }
             //console.log(JSON.stringify(response.data));
 
         })
